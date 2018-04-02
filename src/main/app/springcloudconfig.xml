@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:spring-cloud-config="http://www.mulesoft.org/schema/mule/spring-cloud-config"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/spring-cloud-config http://www.mulesoft.org/schema/mule/spring-cloud-config/current/mule-spring-cloud-config.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/spring-cloud-config http://www.mulesoft.org/schema/mule/spring-cloud-config/current/mule-spring-cloud-config.xsd">
+
+	<spring-cloud-config:config name="Spring_Cloud_Config__Spring_Cloud_Configuration"
+		applicationName="example" profiles="dev"
+		doc:name="Spring Cloud Config: Spring Cloud Configuration" />
+
+ 	
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="localhost" port="${mule.http.port}" doc:name="HTTP Listener Configuration" />
     
-    <spring-cloud-config:config name="Spring_Cloud_Config" applicationName="foo" profiles="a,b,c" 
-		label="abc" configServerBaseUrl="http://localhost:8888/"/>
-    
-    <http:listener-config name="HTTP_FlowTrigger" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
-    
-    <flow name="springcloudconfigFlow">
-        <http:listener config-ref="HTTP_FlowTrigger" path="/configdemo" doc:name="HTTP"/>
-    </flow>
-    
+    		
+	<flow name="mule-cloud-configFlow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/foo" doc:name="HTTP" />
+		
+		<spring-cloud-config:dump-configuration config-ref="Spring_Cloud_Config__Spring_Cloud_Configuration"
+			doc:name="Spring Cloud Config" /> <!-- 1 -->
+			
+		<logger message="Property: ActiveMQ URI = ${activemq.url} and http = ${mule.http.port}"
+			level="INFO" doc:name="Logger" />
+	</flow>
+
 </mule>
