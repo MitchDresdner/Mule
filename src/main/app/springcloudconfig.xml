@@ -9,11 +9,13 @@ http://www.mulesoft.org/schema/mule/spring-cloud-config http://www.mulesoft.org/
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
     
-    <http:listener-config name="HTTP_FlowTrigger" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <spring-cloud-config:config name="Spring_Cloud_Config" applicationName="foo" profiles="a,b,c" 
-	label="abc" configServerBaseUrl="http://localhost:8888/"/>
+		label="abc" configServerBaseUrl="http://localhost:8888/"/>
+    
+    <http:listener-config name="HTTP_FlowTrigger" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     
     <flow name="springcloudconfigFlow">
         <http:listener config-ref="HTTP_FlowTrigger" path="/configdemo" doc:name="HTTP"/>
     </flow>
+    
 </mule>
